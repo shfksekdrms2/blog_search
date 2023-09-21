@@ -1,96 +1,82 @@
 package com.solution.blog.domain.search.controller;
 
+import com.solution.blog.domain.search.component.BlogComponent;
 import domain.solution.core.model.controller.SortType;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(BlogSearchController.class)
 class BlogSearchControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext ctx;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
-                .alwaysDo(print())
-                .build();
-    }
+    @MockBean
+    BlogComponent blogComponent;
 
     // 필수값만 넣고 조회 가능한지 확인
     @Test
+    @DisplayName("정상 요청")
     public void requirementTest() throws Exception {
         // given
         String keyword = "123";
 
-        // when
-        //then
+        // when, then
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/blog/search")
-                        .param("keyword", keyword)
-        ).andExpect(
-                MockMvcResultMatchers.status().isOk()
-        );
+                        get("/blog/search")
+                                .param("keyword", keyword)
+                ).andExpect(status().isOk())
+                .andDo(print());
     }
 
-    // 필수값이 입력되지 않은 경우 - validationException 예외 발생
     @Test
+    @DisplayName("필수값이 입력되지 않은 경우")
     public void requirementBlankTest() throws Exception {
         // given
         String keyword = "";
 
-        // when
-        //then
+        // when, then
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/blog/search")
-                        .param("keyword", keyword)
-        )
-                .andExpect(
-                        MockMvcResultMatchers.status().is4xxClientError()
+                        get("/blog/search")
+                                .param("keyword", keyword)
                 )
+                .andExpect(status().isBadRequest())
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.code")
                                 .value("ValidationException")
                 )
-                .andReturn();
+                .andDo(print());
 
     }
 
-    // 정렬 타입을 잘못 요청한 경우 - MethodArgumentTypeMismatchException 예외 발생
     @Test
+    @DisplayName("정렬 타입을 잘못 요청한 경우")
     public void sortTypeTest() throws Exception {
         // given
         String keyword = "내용";
         String sortType = "accuracy111";
 
-        // when
-        //then
+        // when, then
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/blog/search")
-                        .param("keyword", keyword)
-                        .param("sortType", sortType)
-        )
-                .andExpect(
-                        MockMvcResultMatchers.status().is4xxClientError()
+                        get("/blog/search")
+                                .param("keyword", keyword)
+                                .param("sortType", sortType)
                 )
+                .andExpect(status().isBadRequest())
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.code")
                                 .value("MethodArgumentTypeMismatchException")
                 )
-                .andReturn();
+                .andDo(print());
 
     }
 
@@ -102,22 +88,19 @@ class BlogSearchControllerTest {
         String sortType = SortType.RECENCY.name();
         Integer page = 0;
 
-        // when
-        //then
+        // when, then
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/blog/search")
-                        .param("keyword", keyword)
-                        .param("sortType", sortType)
-                        .param("page", String.valueOf(page))
-        )
-                .andExpect(
-                        MockMvcResultMatchers.status().is4xxClientError()
+                        get("/blog/search")
+                                .param("keyword", keyword)
+                                .param("sortType", sortType)
+                                .param("page", String.valueOf(page))
                 )
+                .andExpect(status().isBadRequest())
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.code")
                                 .value("ValidationException")
                 )
-                .andReturn();
+                .andDo(print());
 
     }
 
