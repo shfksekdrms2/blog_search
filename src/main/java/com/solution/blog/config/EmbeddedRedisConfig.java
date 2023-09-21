@@ -1,6 +1,5 @@
 package com.solution.blog.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -14,7 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableRedisRepositories
 public class EmbeddedRedisConfig {
 
