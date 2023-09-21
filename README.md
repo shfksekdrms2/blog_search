@@ -23,6 +23,7 @@
 
 ## 기능 구현
 1. 블로그 검색
+- get localhost:8080/blog/search?keyword={}&sortType={ACCURACY, RECENCY}&page={1,50}&size={1,50}
 - 키워드 검색
     - queryParam 형태로 keyword 에 검색어 입력
 - Pagination 
@@ -33,11 +34,18 @@
           "totalPage": 0,
           "totalCount": 0
         }
-- sorting 기능
-    - ACCURACY(정확도), RECENCY(최신순) 형태로 제공
-- 추후 새로운 검색 소스가 추가될 경우
-    - 멀티 모듈 형태로 검색 소스 추가
+- sortType 옵셔널
+  - ACCURACY 기본
+  - ACCURACY(정확도), RECENCY(최신순) 형태로 제공
+- keyword 필수값
+- page
+  - 1 ~ 50 정수
+- size
+  - 1 ~ 50 정수
+
+
 2. 인기 검색어
+- get localhost:8080/blog/popular/keyword
 - 많이 검색한 순서대로, 최대 10개의 검색 키워드 제공
 - 검색어 별로 검색된 횟수 표시
     - "popularKeywordTopTenList":
@@ -59,3 +67,6 @@
 - 블로그 검색이 둘다 실패할 경우 빈 리스트로 내려줌
 - 인기 검색어 목록은 redis 에서 조회
 - 전략 패턴을 이용하여 다음 -> 네이버 순으로 조회 하도록 구현 (둘다 장애가 발생하였을 경우에 빈 데이터 내려줌)
+
+## 제약 사항
+- 외부 API(다음, 네이버) 경우 변경이 적다는 가정하에 1분 동안 inMemory 를 이용하여 캐시 해둠.
