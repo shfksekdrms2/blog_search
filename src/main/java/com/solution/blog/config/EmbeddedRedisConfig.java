@@ -27,12 +27,12 @@ public class EmbeddedRedisConfig {
     }
 
     @PostConstruct
-    public void startRedis() {
+    private void startRedis() {
         this.redisServer.start();
     }
 
     @PreDestroy
-    public void stopRedis() {
+    private void stopRedis() {
         this.redisServer.stop();
     }
 
