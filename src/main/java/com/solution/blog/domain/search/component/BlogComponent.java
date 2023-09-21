@@ -57,17 +57,6 @@ public class BlogComponent {
                 System.out.println("api 요청 실패로 다음 요청 실행");
             }
         }
-//        try {
-//            // daum blog open api
-//            rs = daumClient.findBlog(keyword, sortType, pageRequest);
-//        } catch (Exception e) {
-//            // naver blog open api
-//            try {
-//                rs = naverClient.findBlog(keyword, sortType, pageRequest);
-//            } catch (Exception b) {
-//                return new BlogSearchRs();
-//            }
-//        }
         return rs;
     }
 }
