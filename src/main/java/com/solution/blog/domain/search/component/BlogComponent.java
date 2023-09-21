@@ -8,6 +8,8 @@ import domain.solution.core.model.controller.BlogSearchRs;
 import domain.solution.core.model.controller.SortType;
 import domain.solution.core.search.FindBlogStrategy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ public class BlogComponent {
 
     private final BlogSearchWordService blogSearchWordService;
 
+    private final ApplicationContext applicationContext;
+
     public static final Map<ClientType, FindBlogStrategy> map = new LinkedHashMap<>();
 
     @PostConstruct
@@ -38,7 +42,9 @@ public class BlogComponent {
 
         // 블로그 조회
         PageRequest pageRequest = PageRequest.of(page, size);
-        BlogSearchRs rs = searchBlogRs(keyword, sortType, pageRequest);
+        // 내부 호출시에 proxy 를 참조 할 수 있도록 수정
+        BlogComponent bean = applicationContext.getBean(BlogComponent.class);
+        BlogSearchRs rs = bean.searchBlogRs(keyword, sortType, pageRequest);
         rs.setPageInfo(pageRequest);
         return rs;
     }
@@ -47,7 +53,8 @@ public class BlogComponent {
      * find 순서 대로 찾기
      * daum -> naver 추가
      **/
-    private BlogSearchRs searchBlogRs(String keyword, SortType sortType, PageRequest pageRequest) {
+    @Cacheable(value = "blogStore")
+    public BlogSearchRs searchBlogRs(String keyword, SortType sortType, PageRequest pageRequest) {
         BlogSearchRs rs = new BlogSearchRs();
         for (FindBlogStrategy findBlogStrategy : map.values()) {
             try {

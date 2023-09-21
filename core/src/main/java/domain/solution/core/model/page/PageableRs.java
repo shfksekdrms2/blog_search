@@ -15,6 +15,6 @@ public class PageableRs {
     }
 
     public void setPageInfo(PageRequest pageRequest) {
-        this.pageInfo = new PageableDto(pageRequest);
+        this.pageInfo.update(pageRequest);
     }
 }

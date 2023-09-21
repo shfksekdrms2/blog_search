@@ -27,7 +27,7 @@ public class PageableDto {
         this.totalCount = page.getTotalElements();
     }
 
-    public PageableDto(PageRequest pageRequest) {
+    public void update(PageRequest pageRequest) {
         this.currentPage = pageRequest.getPageNumber();
         this.size = pageRequest.getPageSize();
     }
