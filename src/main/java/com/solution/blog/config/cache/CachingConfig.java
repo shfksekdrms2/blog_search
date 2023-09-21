@@ -29,7 +29,7 @@ public class CachingConfig {
     }
 
     @CacheEvict(value = "blogStore", allEntries = true)
-    @Scheduled(fixedDelay = 10 * 1000) // 10초
+    @Scheduled(fixedDelay = 60 * 1000) // 60초
     public void emptyDaumStore() {
         System.out.println("remove blogStore cache");
     }
