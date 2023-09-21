@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 @Setter
 @Getter
 public class PageableRs {
-    private PageableDto pageInfo;
+    private PageableDto pageInfo = new PageableDto();
 
     public void setPageInfo(Page<?> page) {
         this.pageInfo = new PageableDto(page);

@@ -22,6 +22,9 @@ public class PageableDto {
     @Schema(description = "검색된 문서 수")
     private Long totalCount = 0L;
 
+    public PageableDto() {
+    }
+
     public PageableDto(Page<?> page) {
         this.totalPage = page.getTotalPages();
         this.totalCount = page.getTotalElements();
