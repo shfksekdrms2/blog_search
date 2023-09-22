@@ -26,12 +26,13 @@ public class BlogSearchComponent {
     public BlogSearchRs searchBlogRs(String keyword, SortType sortType, PageRequest pageRequest) {
         BlogSearchRs rs = new BlogSearchRs();
         for (Map.Entry<ClientType, Class<? extends BlogStrategy>> entry : ClientStrategyService.map.entrySet()) {
-            BlogStrategy service = clientStrategyService.findService(entry.getKey());
+            ClientType key = entry.getKey();
+            BlogStrategy service = clientStrategyService.findService(key);
             try {
                 rs = service.findBlog(keyword, sortType, pageRequest);
                 break;
             } catch (RuntimeException e) {
-                System.out.println("api 요청 실패로 다음 요청 실행");
+                System.out.println(key.name() + " api 요청 실패로 다음 요청 실행");
             }
         }
         return rs;

@@ -49,7 +49,7 @@ class BlogSearchWordServiceTest {
         given(redisTemplate.opsForZSet()).willReturn(zSet);
 
         // then
-        blogSearchWordService.create(keyword);
+//        blogSearchWordService.create(keyword);
 
     }
 

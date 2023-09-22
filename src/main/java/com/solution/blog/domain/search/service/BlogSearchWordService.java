@@ -3,7 +3,6 @@ package com.solution.blog.domain.search.service;
 import com.solution.blog.domain.redis.RedisConstants;
 import com.solution.blog.domain.search.controller.model.BlogPopularKeywordDto;
 import com.solution.blog.domain.search.controller.model.BlogPopularKeywordRs;
-import com.solution.blog.domain.search.entity.BlogSearchWordLog;
 import com.solution.blog.repository.BlogSearchWordLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -24,17 +23,6 @@ public class BlogSearchWordService {
     private final BlogSearchWordLogRepository blogSearchWordLogRepository;
 
     private final StringRedisTemplate redisTemplate;
-
-    @Transactional
-    public void create(String keyword) {
-        // db 저장
-        BlogSearchWordLog blogSearchWordLog = BlogSearchWordLog.create(keyword);
-        blogSearchWordLogRepository.save(blogSearchWordLog);
-
-        // redis 저장
-        ZSetOperations<String, String> zSet = redisTemplate.opsForZSet();
-        zSet.incrementScore(RedisConstants.REDIS_HITS_KEY, keyword, 1);
-    }
 
     public BlogPopularKeywordRs findBlogPopularKeyword() {
         List<BlogPopularKeywordDto> popularKeywordTopTenList;
