@@ -5,7 +5,7 @@ import com.solution.naver.domain.model.NaverBlogRs;
 import domain.solution.core.model.controller.BlogSearchDto;
 import domain.solution.core.model.controller.BlogSearchRs;
 import domain.solution.core.model.controller.SortType;
-import domain.solution.core.search.FindBlogStrategy;
+import domain.solution.core.search.BlogStrategy;
 import io.netty.handler.codec.http.HttpScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class NaverClient implements FindBlogStrategy {
+public class NaverClient implements BlogStrategy {
 
     private final WebClient webClient;
 

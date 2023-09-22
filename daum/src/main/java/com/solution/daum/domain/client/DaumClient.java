@@ -5,7 +5,7 @@ import com.solution.daum.domain.model.DaumBlogRs;
 import domain.solution.core.model.controller.BlogSearchDto;
 import domain.solution.core.model.controller.BlogSearchRs;
 import domain.solution.core.model.controller.SortType;
-import domain.solution.core.search.FindBlogStrategy;
+import domain.solution.core.search.BlogStrategy;
 import io.netty.handler.codec.http.HttpScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class DaumClient implements FindBlogStrategy {
+public class DaumClient implements BlogStrategy {
 
     private final WebClient webClient;
 

@@ -1,12 +1,12 @@
 package com.solution.blog.domain.search.component;
 
+import com.solution.blog.domain.search.component.strategy.ClientStrategyService;
 import com.solution.blog.domain.search.component.strategy.ClientType;
 import com.solution.daum.domain.client.DaumClient;
 import com.solution.naver.domain.client.NaverClient;
 import domain.solution.core.model.controller.BlogSearchDto;
 import domain.solution.core.model.controller.BlogSearchRs;
 import domain.solution.core.model.controller.SortType;
-import domain.solution.core.search.FindBlogStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -35,11 +34,8 @@ class BlogSearchComponentTest {
     @InjectMocks
     private BlogSearchComponent blogSearchComponent;
 
-    private void init() {
-        Map<ClientType, FindBlogStrategy> map = BlogSearchComponent.map;
-        map.put(ClientType.DAUM, daumClient);
-        map.put(ClientType.NAVER, naverClient);
-    }
+    @Mock
+    ClientStrategyService clientStrategyService;
 
     private static List<BlogSearchDto> getBlogSearchList() {
         List<BlogSearchDto> documents = new ArrayList<>();
@@ -67,7 +63,7 @@ class BlogSearchComponentTest {
         List<BlogSearchDto> documents = getBlogSearchList();
         givenBlogSearchRs.setDocuments(documents);
 
-        init();
+        given(clientStrategyService.findService(ClientType.DAUM)).willReturn(daumClient);
         given(daumClient.findBlog(keyword, sortType, pageRequest)).willReturn(givenBlogSearchRs);
 
         // when
@@ -94,7 +90,10 @@ class BlogSearchComponentTest {
         BlogSearchRs givenBlogSearchRs = new BlogSearchRs();
         List<BlogSearchDto> documents = getBlogSearchList();
         givenBlogSearchRs.setDocuments(documents);
-        init();
+
+
+        given(clientStrategyService.findService(ClientType.DAUM)).willReturn(daumClient);
+        given(clientStrategyService.findService(ClientType.NAVER)).willReturn(naverClient);
 
         given(daumClient.findBlog(keyword, sortType, pageRequest)).willThrow(new RuntimeException());
         given(naverClient.findBlog(keyword, sortType, pageRequest)).willReturn(givenBlogSearchRs);
