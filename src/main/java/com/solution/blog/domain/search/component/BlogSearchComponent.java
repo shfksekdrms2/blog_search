@@ -6,6 +6,7 @@ import domain.solution.core.model.controller.BlogSearchRs;
 import domain.solution.core.model.controller.SortType;
 import domain.solution.core.search.BlogStrategy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
