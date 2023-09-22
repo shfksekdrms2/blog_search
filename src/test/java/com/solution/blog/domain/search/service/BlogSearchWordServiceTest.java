@@ -3,7 +3,6 @@ package com.solution.blog.domain.search.service;
 import com.solution.blog.domain.redis.RedisConstants;
 import com.solution.blog.domain.search.controller.model.BlogPopularKeywordDto;
 import com.solution.blog.domain.search.controller.model.BlogPopularKeywordRs;
-import com.solution.blog.domain.search.entity.BlogSearchWordLog;
 import com.solution.blog.repository.BlogSearchWordLogRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,20 +37,6 @@ class BlogSearchWordServiceTest {
 
     @Mock
     ZSetOperations<String, String> zSet;
-
-    @Test
-    @DisplayName("키워드 생성")
-    void create() {
-        // given
-        String keyword = "블로그검색";
-        BlogSearchWordLog blogSearchWordLog = BlogSearchWordLog.create(keyword);
-
-        given(redisTemplate.opsForZSet()).willReturn(zSet);
-
-        // then
-//        blogSearchWordService.create(keyword);
-
-    }
 
     @Test
     @DisplayName("키워드 조회 - redis")
