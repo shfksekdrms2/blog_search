@@ -1,4 +1,4 @@
-package com.solution.blog.config;
+package com.solution.blog.config.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
